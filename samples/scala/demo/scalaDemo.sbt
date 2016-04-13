@@ -8,7 +8,7 @@ scalariformSettings
 
 libraryDependencies ++= Seq(
   specs2 % "test",
-  "ws.securesocial" %% "securesocial" % version.value,
+  "com.github.kildievr.ws.securesocial" %% "securesocial" % version.value,
   "net.codingwell" %% "scala-guice" % "4.0.0",
   "com.typesafe.play" %% "play-mailer" % "3.0.1"
 )

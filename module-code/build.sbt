@@ -25,7 +25,7 @@ resolvers ++= Seq(
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
 
-organization := "ws.securesocial"
+organization := "com.github.kildievr.ws.securesocial"
 
 organizationName := "SecureSocial"
 
@@ -37,6 +37,8 @@ publishArtifact in Test := false
 
 pomIncludeRepository := { _ => false }
 
+useGpg := true
+
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
   if (version.value.trim.endsWith("SNAPSHOT"))
@@ -44,6 +46,8 @@ publishTo := {
   else
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
+
+credentials += Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", "P7Q/az0l", "8IJV3ycy4Ls2pvU+23ycBDVB2eLOafDzLbTwmD8/rcTz")
 
 startYear := Some(2012)
 
