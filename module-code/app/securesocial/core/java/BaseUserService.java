@@ -1,24 +1,22 @@
 /**
  * Copyright 2012-2014 Jorge Aliss (jaliss at gmail dot com) - twitter: @jaliss
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
  */
 package securesocial.core.java;
 
 import play.libs.F;
 import play.libs.Scala;
-import scala.*;
 import scala.Option;
 import scala.concurrent.Future;
 import securesocial.core.BasicProfile;
@@ -27,13 +25,12 @@ import securesocial.core.providers.MailToken;
 import securesocial.core.services.SaveMode;
 import securesocial.core.services.UserService;
 
-import java.lang.Boolean;
+import java.util.function.Function;
 
 /**
  * A base user service for developers that want to write their UserService in Java.
- *
+ * <p>
  * Note: You need to implement all the doXXX methods below.
- *
  */
 public abstract class BaseUserService<U> implements UserService<U> {
     protected BaseUserService() {
@@ -46,9 +43,9 @@ public abstract class BaseUserService<U> implements UserService<U> {
      */
     @Override
     public Future<Option<BasicProfile>> find(String providerId, String userId) {
-        return doFind(providerId, userId).map(new F.Function<BasicProfile, Option<BasicProfile>>() {
+        return doFind(providerId, userId).map(new Function<BasicProfile, Option<BasicProfile>>() {
             @Override
-            public Option<BasicProfile> apply(BasicProfile user) throws Throwable {
+            public Option<BasicProfile> apply(BasicProfile user) {
                 return Scala.Option(user);
             }
         }).wrapped();
@@ -56,18 +53,18 @@ public abstract class BaseUserService<U> implements UserService<U> {
 
     /**
      * Finds an Identity by email and provider id.
-     *
+     * <p>
      * Note: If you do not plan to use the UsernamePassword provider just provide en empty
      * implementation.
      *
-     * @param email - the user email
+     * @param email      - the user email
      * @param providerId - the provider id
      * @return
      */
     @Override
     public Future<Option<BasicProfile>> findByEmailAndProvider(String email, String providerId) {
-        return doFindByEmailAndProvider(email, providerId).map(new F.Function<BasicProfile, Option<BasicProfile>>() {
-            public Option<BasicProfile> apply(BasicProfile user) throws Throwable {
+        return doFindByEmailAndProvider(email, providerId).map(new Function<BasicProfile, Option<BasicProfile>>() {
+            public Option<BasicProfile> apply(BasicProfile user) {
                 return Scala.Option(user);
             }
         }).wrapped();
@@ -88,7 +85,7 @@ public abstract class BaseUserService<U> implements UserService<U> {
      * Links the current user Identity to another
      *
      * @param current The Identity of the current user
-     * @param to The Identity that needs to be linked to the current user
+     * @param to      The Identity that needs to be linked to the current user
      */
     @Override
     public Future<U> link(U current, BasicProfile to) {
@@ -97,9 +94,9 @@ public abstract class BaseUserService<U> implements UserService<U> {
 
     @Override
     public Future<scala.Option<PasswordInfo>> passwordInfoFor(U user) {
-        return doPasswordInfoFor(user).map(new F.Function<PasswordInfo, Option<PasswordInfo>>() {
+        return doPasswordInfoFor(user).map(new Function<PasswordInfo, Option<PasswordInfo>>() {
             @Override
-            public Option<PasswordInfo> apply(PasswordInfo passwordInfo) throws Throwable {
+            public Option<PasswordInfo> apply(PasswordInfo passwordInfo) {
                 return Scala.Option(passwordInfo);
             }
         }).wrapped();
@@ -107,9 +104,9 @@ public abstract class BaseUserService<U> implements UserService<U> {
 
     @Override
     public Future<scala.Option<BasicProfile>> updatePasswordInfo(U user, PasswordInfo info) {
-        return doUpdatePasswordInfo(user, info).map(new F.Function<BasicProfile, Option<BasicProfile>>() {
+        return doUpdatePasswordInfo(user, info).map(new Function<BasicProfile, Option<BasicProfile>>() {
             @Override
-            public Option<BasicProfile> apply(BasicProfile basicProfile) throws Throwable {
+            public Option<BasicProfile> apply(BasicProfile basicProfile) {
                 return Scala.Option(basicProfile);
             }
         }).wrapped();
@@ -118,7 +115,7 @@ public abstract class BaseUserService<U> implements UserService<U> {
     /**
      * Saves a token.  This is needed for users that
      * are creating an account in the system instead of using one in a 3rd party system.
-     *
+     * <p>
      * Note: If you do not plan to use the UsernamePassword provider just provide en empty
      * implementation
      *
@@ -127,9 +124,9 @@ public abstract class BaseUserService<U> implements UserService<U> {
      */
     @Override
     public Future<MailToken> saveToken(MailToken mailToken) {
-        return doSaveToken(Token.fromScala(mailToken)).map(new F.Function<Token, MailToken>() {
+        return doSaveToken(Token.fromScala(mailToken)).map(new Function<Token, MailToken>() {
             @Override
-            public MailToken apply(Token token) throws Throwable {
+            public MailToken apply(Token token) {
                 return token.toScala();
             }
         }).wrapped();
@@ -137,7 +134,7 @@ public abstract class BaseUserService<U> implements UserService<U> {
 
     /**
      * Finds a token
-     *
+     * <p>
      * Note: If you do not plan to use the UsernamePassword provider just provide en empty
      * implementation
      *
@@ -146,10 +143,10 @@ public abstract class BaseUserService<U> implements UserService<U> {
      */
     @Override
     public Future<Option<MailToken>> findToken(String token) {
-        return doFindToken(token).map(new F.Function<Token, Option<MailToken>>() {
+        return doFindToken(token).map(new Function<Token, Option<MailToken>>() {
             @Override
-            public Option<MailToken> apply(Token token) throws Throwable {
-                MailToken scalaToken =  token  != null ? token.toScala() : null;
+            public Option<MailToken> apply(Token token) {
+                MailToken scalaToken = token != null ? token.toScala() : null;
                 return Scala.Option(scalaToken);
             }
         }).wrapped();
@@ -157,7 +154,7 @@ public abstract class BaseUserService<U> implements UserService<U> {
 
     /**
      * Deletes a token
-     *
+     * <p>
      * Note: If you do not plan to use the UsernamePassword provider just provide en empty
      * implementation
      *
@@ -165,10 +162,10 @@ public abstract class BaseUserService<U> implements UserService<U> {
      */
     @Override
     public Future<scala.Option<MailToken>> deleteToken(String uuid) {
-        return doDeleteToken(uuid).map(new F.Function<Token, Option<MailToken>>() {
+        return doDeleteToken(uuid).map(new Function<Token, Option<MailToken>>() {
             @Override
-            public Option<MailToken> apply(Token token) throws Throwable {
-                MailToken scalaToken =  token  != null ? token.toScala() : null;
+            public Option<MailToken> apply(Token token) {
+                MailToken scalaToken = token != null ? token.toScala() : null;
                 return Scala.Option(scalaToken);
             }
         }).wrapped();
@@ -176,10 +173,9 @@ public abstract class BaseUserService<U> implements UserService<U> {
 
     /**
      * Deletes all expired tokens
-     *
+     * <p>
      * Note: If you do not plan to use the UsernamePassword provider just provide en empty
      * implementation
-     *
      */
     @Override
     public void deleteExpiredTokens() {
@@ -196,7 +192,7 @@ public abstract class BaseUserService<U> implements UserService<U> {
 
     /**
      * Saves a token
-     *
+     * <p>
      * Note: If you do not plan to use the UsernamePassword provider just provide en empty
      * implementation
      *
@@ -208,23 +204,24 @@ public abstract class BaseUserService<U> implements UserService<U> {
      * Links the current user Identity to another
      *
      * @param current The Identity of the current user
-     * @param to The Identity that needs to be linked to the current user
+     * @param to      The Identity that needs to be linked to the current user
      */
     public abstract F.Promise<U> doLink(U current, BasicProfile to);
 
     /**
      * Finds the user in the backing store.
+     *
      * @return an Identity instance or null if no user matches the specified id
      */
     public abstract F.Promise<BasicProfile> doFind(String providerId, String userId);
 
-    public abstract F.Promise<PasswordInfo>  doPasswordInfoFor(U user);
+    public abstract F.Promise<PasswordInfo> doPasswordInfoFor(U user);
 
     public abstract F.Promise<BasicProfile> doUpdatePasswordInfo(U user, PasswordInfo info);
 
     /**
      * Finds a token
-     *
+     * <p>
      * Note: If you do not plan to use the UsernamePassword provider just provide en empty
      * implementation
      *
@@ -236,11 +233,11 @@ public abstract class BaseUserService<U> implements UserService<U> {
 
     /**
      * Finds an identity by email and provider id.
-     *
+     * <p>
      * Note: If you do not plan to use the UsernamePassword provider just provide en empty
      * implementation.
      *
-     * @param email - the user email
+     * @param email      - the user email
      * @param providerId - the provider id
      * @return an Identity instance or null if no user matches the specified id
      */
@@ -248,7 +245,7 @@ public abstract class BaseUserService<U> implements UserService<U> {
 
     /**
      * Deletes a token
-     *
+     * <p>
      * Note: If you do not plan to use the UsernamePassword provider just provide en empty
      * implementation
      *
@@ -258,10 +255,9 @@ public abstract class BaseUserService<U> implements UserService<U> {
 
     /**
      * Deletes all expired tokens
-     *
+     * <p>
      * Note: If you do not plan to use the UsernamePassword provider just provide en empty
      * implementation
-     *
      */
     public abstract void doDeleteExpiredTokens();
 }
